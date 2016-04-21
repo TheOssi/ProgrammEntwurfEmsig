@@ -1,0 +1,7 @@
+Termine:
+02.Mai(23:59)	Ladenheft: Fragen & Antworten
+16.Mai			UC-Diagramme + AnalyseKlassenDiagramm
+23.Mai			Sequenzdiagramm
+30.Mai			Aktivitätsdiagram
+06.Juni			Zustandsdiagram
+13.Juni			Entwurfsklassendiagram
