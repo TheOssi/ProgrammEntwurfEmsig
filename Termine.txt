@@ -1,5 +1,5 @@
-Termine:
-02.Mai(23:59)	Ladenheft: Fragen & Antworten
+﻿Termine:
+02.Mai(23:59)	Lastenheft: Fragen & Antworten
 16.Mai			UC-Diagramme + AnalyseKlassenDiagramm
 23.Mai			Sequenzdiagramm
 30.Mai			Aktivitätsdiagram
