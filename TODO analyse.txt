@@ -1,14 +1,2 @@
-LH:
-alle Attribute abfragen
-Medien klären
-Belege kklären
-kan ein Nutzer selbst seine Kontaktdaten verwalten
-Rollen klären
-Nutzer vs Person (Admin)
-Aktion verstecken
-UH spezifizieren (auch mehrere)
-Aktion hidden
-was löschbar
-Caterer als Klasse
-suche koplett
+suche einbauen
 kommerzielle nutzer hochzeiten suchen
