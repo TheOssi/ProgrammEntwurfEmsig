@@ -5,3 +5,4 @@
 30.Mai			Aktivitätsdiagram
 06.Juni			Zustandsdiagram
 13.Juni			Entwurfsklassendiagram
+2 Wochen vor Abgabe zur Kontrolle hinschicken
