@@ -1,7 +1,8 @@
-﻿Termine:
+Termine:
 02.Mai(23:59)	Lastenheft: Fragen & Antworten
 16.Mai			UC-Diagramme + AnalyseKlassenDiagramm
 23.Mai			Sequenzdiagramm
-30.Mai			Aktivitätsdiagram
+30.Mai			Aktivit�tsdiagram
 06.Juni			Zustandsdiagram
 13.Juni			Entwurfsklassendiagram
+2 Wochen vor Abgabe zur Kontrolle hinschicken
