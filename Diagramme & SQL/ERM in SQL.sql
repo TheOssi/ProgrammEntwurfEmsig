@@ -1,7 +1,7 @@
 -- #### TODO #######
--- add foreign keys
 -- trinken/essen redudanz erklären
 -- typen etc in enum -> eigene tabelle?
+-- länge bei strings
 -- #################
 
 -- Datenbank erzeugen
@@ -15,6 +15,7 @@ USE HOCHZEITSPLANER;
 
 CREATE TABLE Hochzeitsveranstaltungen (
 	hochzeitsID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
+	motto VARCHAR(250),
 	PRIMARY KEY ( hochzeitsID )
 );
 
@@ -41,11 +42,11 @@ CREATE TABLE EmailAdressen (
 CREATE TABLE Caterer (
 	catererID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	beschreibung VARCHAR(255),
-	kontaktPerson INT UNSIGNED,
+	kontaktPerson INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( catererID ),
 	FOREIGN KEY ( kontaktPerson ) REFERENCES Personen(personID)
 		ON UPDATE CASCADE
-		ON DELETE SET NULL
+		ON DELETE NO ACTION;
 );
 
 CREATE TABLE Aktionen (
@@ -54,8 +55,11 @@ CREATE TABLE Aktionen (
 	dauer TIME NOT NULL,
 	typ VARCHAR(250) NOT NULL,
 	versteckt BOOL NOT NULL DEFAULT true,
-	zustand VARCHAR(250) NOT NULL,
-	PRIMARY KEY ( aktionID )
+	zustand INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( aktionID ),
+	FOREIGN KEY ( zustand ) REFERENCES Aktionszustände(zustand)
+		ON UPDATE CASCADE,
+		ON DELETE NO ACTION
 );
 
 CREATE TABLE Essen (
@@ -102,6 +106,13 @@ CREATE TABLE Orte (
 	ortID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
 	ort VARCHAR(250) NOT NULL,
 	PRIMARY KEY ( ortID )
+);
+
+-- weitere tabellen
+CREATE TABLE Aktionszustände (
+	aktionszustandsID INT NOT NULL UNSIGNED UNIQUE AUTO_INCREMENT,
+	beschreibung VARCHAR(250) NOT NULL,
+	PRIMARY KEY ( aktionszustandsID )
 );
 
 
