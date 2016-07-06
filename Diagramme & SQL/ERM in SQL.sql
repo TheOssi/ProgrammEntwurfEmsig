@@ -316,6 +316,7 @@ CREATE TABLE AktionsBelege (
 CREATE TABLE AktionsHilfsmittel (
 	aktionID INT UNSIGNED NOT NULL,
 	hilfsmittelID INT UNSIGNED NOT NULL,
+	anzahl INT UNSIGNED NOT NULL DEFAULT 1,
 	PRIMARY KEY ( aktionID, hilfsmittelID ),
 	FOREIGN KEY ( aktionID ) REFERENCES Aktionen(aktionID)
 		ON UPDATE CASCADE
