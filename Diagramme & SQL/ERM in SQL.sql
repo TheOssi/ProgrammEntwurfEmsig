@@ -79,6 +79,7 @@ CREATE TABLE Caterer (
 	catererID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	beschreibung VARCHAR(255),
 	kontaktPerson INT UNSIGNED NOT NULL,
+	zumVergleich BOOL NOT NULL DEFAULT FALSE,
 	PRIMARY KEY ( catererID ),
 	FOREIGN KEY ( kontaktPerson ) REFERENCES Personen(personID)
 		ON UPDATE CASCADE
