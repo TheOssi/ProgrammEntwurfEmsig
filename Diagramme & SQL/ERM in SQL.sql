@@ -5,6 +5,7 @@
 -- mit AKD abgleich (planer, etc, ort, systemnutzer!)
 -- reihenfolge -> AKD
 -- rollen: warum ausgelagert?
+-- priorität erklären
 -- #################
 
 -- Datenbank erzeugen
@@ -88,6 +89,8 @@ CREATE TABLE Aktionen (
 	aktionID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	titel VARCHAR(250) NOT NULL,
 	beschreibung VARCHAR(250) NOT NULL,
+	notiz VARCHAR(250),
+	prioritaet TINYINT NOT NULL,
 	datum DATETIME NOT NULL,
 	dauer TIME NOT NULL,
 	aktionsArt INT UNSIGNED NOT NULL,
@@ -129,8 +132,10 @@ CREATE TABLE Medien(
 CREATE TABLE Belege(
 	belegID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	kosten DOUBLE UNSIGNED NOT NULL,
+	währung CHAR(3) NOT NULL,
 	title VARCHAR(250) NOT NULL,
 	beschreibung VARCHAR(250), 
+	private BOOL NOT NULL,
 	PRIMARY KEY ( belegID )
 );
 
