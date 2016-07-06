@@ -1,7 +1,10 @@
 -- #### TODO #######
--- trinken/essen redudanz erklären
--- typen etc in enum -> eigene tabelle?
+-- trinken/essen redudanz erklären -> beschreibung
 -- länge bei strings
+-- fremdschlüssel überdenken
+-- mit AKD abgleich (planer, etc, ort, systemnutzer!)
+-- reihenfolge -> AKD
+-- rollen: warum ausgelagert?
 -- #################
 
 -- Datenbank erzeugen
@@ -11,7 +14,28 @@ CREATE DATABASE HOCHZEITSPLANER;
 USE HOCHZEITSPLANER;
 
 
--- Erzeuge Entities
+-- Erzeuge Hilfstabellen
+
+CREATE TABLE AktionsZustaende (
+	aktionsZustandID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	beschreibung VARCHAR(250) NOT NULL,
+	PRIMARY KEY ( aktionsZustandID )
+);
+
+CREATE TABLE AktionsArten (
+	aktionsArtID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	beschreibung VARCHAR(250) NOT NULL,
+	PRIMARY KEY ( aktionsArtID )
+);
+
+CREATE TABLE HilfsmittelArten (
+	hilfsmittelArtID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	beschreibung VARCHAR(250) NOT NULL,
+	PRIMARY KEY ( hilfsmittelArtID )
+);
+
+
+-- Erzeuge Entity-Tabellen
 
 CREATE TABLE Hochzeitsveranstaltungen (
 	hochzeitsID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
@@ -25,6 +49,17 @@ CREATE TABLE Personen (
 	adresse VARCHAR(250) NOT NULL,
 	istDienstleister BOOL NOT NULL DEFAULT FALSE,
 	PRIMARY KEY ( personID )
+);
+
+CREATE TABLE Systemnutzer (
+	nutzerID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
+	benutzernamen VARCHAR(250) NOT NULL,
+	passwort VARCHAR(250) NOT NULL,
+	person INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( nutzerID ),
+	FOREIGN KEY ( nutzerID ) REFERENCES Personen(personID)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION
 );
 
 CREATE TABLE Telefonnummern (
@@ -46,21 +81,27 @@ CREATE TABLE Caterer (
 	PRIMARY KEY ( catererID ),
 	FOREIGN KEY ( kontaktPerson ) REFERENCES Personen(personID)
 		ON UPDATE CASCADE
-		ON DELETE NO ACTION;
+		ON DELETE NO ACTION
 );
 
 CREATE TABLE Aktionen (
 	aktionID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
+	titel VARCHAR(250) NOT NULL,
+	beschreibung VARCHAR(250) NOT NULL,
 	datum DATETIME NOT NULL,
 	dauer TIME NOT NULL,
-	typ VARCHAR(250) NOT NULL,
+	aktionsArt INT UNSIGNED NOT NULL,
 	versteckt BOOL NOT NULL DEFAULT true,
-	zustand INT UNSIGNED NOT NULL,
+	aktionsZustand INT UNSIGNED NOT NULL,
+	meilenstein BOOL NOT NULL DEFAULT false,
 	PRIMARY KEY ( aktionID ),
-	FOREIGN KEY ( zustand ) REFERENCES Aktionszustände(zustand)
-		ON UPDATE CASCADE,
+	FOREIGN KEY ( aktionsZustand ) REFERENCES AktionsZustaende(aktionsZustandID)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
+	FOREIGN KEY ( aktionsArt ) REFERENCES AktionsArten(aktionsArtID)
+		ON UPDATE CASCADE
 		ON DELETE NO ACTION
-);
+); 
 
 CREATE TABLE Essen (
 	essenID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
@@ -82,7 +123,6 @@ CREATE TABLE Medien(
 	mediumID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	uri VARCHAR(250) NOT NULL UNIQUE,
 	title VARCHAR(250) NOT NULL,
-	beschreibung VARCHAR(250),
 	PRIMARY KEY ( mediumID )
 );
 
@@ -98,21 +138,26 @@ CREATE TABLE Hilfsmittel (
 	hilfsmittelID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	title VARCHAR(250) NOT NULL,
 	beschreibung VARCHAR(250),
-	art VARCHAR(250),
-	PRIMARY KEY ( hilfsmittelID )
+	hilfsmittelArt INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( hilfsmittelID ),
+	FOREIGN KEY ( hilfsmittelArt ) REFERENCES HilfsmittelArten(hilfsmittelArtID)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION
 );
 
 CREATE TABLE Orte (
 	ortID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	ort VARCHAR(250) NOT NULL,
+	adresse VARCHAR(250) NOT NULL,
+	adressZusatz VARCHAR(250),
+	stadt VARCHAR(250),
+	postleitzahl INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( ortID )
 );
 
--- weitere tabellen
-CREATE TABLE Aktionszustände (
-	aktionszustandsID INT NOT NULL UNSIGNED UNIQUE AUTO_INCREMENT,
-	beschreibung VARCHAR(250) NOT NULL,
-	PRIMARY KEY ( aktionszustandsID )
+CREATE TABLE Rollen (
+	rollenID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
+	rolle INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( rollenID )
 );
 
 
@@ -154,7 +199,7 @@ CREATE TABLE Hochzeitspaare (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Hochzeitsaktionen (
+CREATE TABLE HochzeitsAktionen (
 	hochzeitsID INT UNSIGNED NOT NULL,
 	aktionID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( hochzeitsID, aktionID ),
@@ -166,7 +211,7 @@ CREATE TABLE Hochzeitsaktionen (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Aktionsverantwortliche (
+CREATE TABLE AktionsVerantwortliche (
 	aktionID INT UNSIGNED NOT NULL,
 	personID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( aktionID, personID ),
@@ -178,7 +223,7 @@ CREATE TABLE Aktionsverantwortliche (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Aktionsteilnehmner (
+CREATE TABLE AktionsTeilnehmner (
 	aktionID INT UNSIGNED NOT NULL,
 	personID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( aktionID, personID ),
@@ -214,7 +259,7 @@ CREATE TABLE CatererTrinken (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Aktionsorte (
+CREATE TABLE AktionsOrte (
 	aktionID INT UNSIGNED NOT NULL,
 	ortID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( aktionID, ortID ),
@@ -226,7 +271,7 @@ CREATE TABLE Aktionsorte (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Aktionsmedien (
+CREATE TABLE AktionsMedien (
 	aktionID INT UNSIGNED NOT NULL,
 	mediumID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( aktionID, mediumID ),
@@ -238,7 +283,7 @@ CREATE TABLE Aktionsmedien (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Medienbelege (
+CREATE TABLE MedienBelege (
 	mediumID INT UNSIGNED NOT NULL,
 	belegID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( mediumID, belegID ),
@@ -250,7 +295,7 @@ CREATE TABLE Medienbelege (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Aktionsbelege (
+CREATE TABLE AktionsBelege (
 	aktioNID INT UNSIGNED NOT NULL,
 	belegID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( aktioNID, belegID ),
@@ -262,7 +307,7 @@ CREATE TABLE Aktionsbelege (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Aktionshilfsmittel (
+CREATE TABLE AktionsHilfsmittel (
 	aktionID INT UNSIGNED NOT NULL,
 	hilfsmittelID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( aktionID, hilfsmittelID ),
@@ -274,7 +319,7 @@ CREATE TABLE Aktionshilfsmittel (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Hilfsmittelbelege (
+CREATE TABLE HilfsmittelBelege (
 	hilfsmittelID INT UNSIGNED NOT NULL,
 	belegID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( hilfsmittelID, belegID ),
@@ -286,7 +331,7 @@ CREATE TABLE Hilfsmittelbelege (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Personenmailadresse (
+CREATE TABLE PersonenMailadressen (
 	personID INT UNSIGNED NOT NULL,
 	emailAdresseID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( personID, emailAdresseID )	,
@@ -298,7 +343,7 @@ CREATE TABLE Personenmailadresse (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Personentelefonnummer (
+CREATE TABLE PersonenTelefonnummern (
 	personID INT UNSIGNED NOT NULL,
 	telefonnnummerID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( personID, telefonnnummerID ),
@@ -306,6 +351,18 @@ CREATE TABLE Personentelefonnummer (
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
 	FOREIGN KEY ( telefonnnummerID ) REFERENCES Telefonnummern(telefonnnummerID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
+);
+
+CREATE TABLE SystemnutzerRollen (
+	nutzerID INT UNSIGNED NOT NULL,
+	rollenID INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( nutzerID, rollenID ),
+	FOREIGN KEY ( nutzerID ) REFERENCES Systemnutzer(nutzerID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	FOREIGN KEY ( rollenID ) REFERENCES Rollen(rollenID)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
