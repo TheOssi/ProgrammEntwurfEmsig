@@ -1,11 +1,11 @@
 -- #### TODO #######
--- trinken/essen redudanz erklären -> beschreibung
+-- trinken/essen redudanz erklären -> beschreibung (oder weg machen)
 -- länge bei strings
--- fremdschlüssel überdenken
--- mit AKD abgleich (planer, etc, ort, systemnutzer!)
+-- fremdschlüssel checken
+-- mit AKD abgleich
 -- reihenfolge -> AKD
--- rollen: warum ausgelagert?
 -- priorität erklären
+-- NO ACTION VS andereAktion
 -- #################
 
 -- Datenbank erzeugen
@@ -40,25 +40,15 @@ CREATE TABLE HilfsmittelArten (
 
 CREATE TABLE Hochzeitsveranstaltungen (
 	hochzeitsID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
+	titel VARCHAR(250) NOT NULL,
 	motto VARCHAR(250),
-	PRIMARY KEY ( hochzeitsID )
-);
-
-CREATE TABLE Personen (
-	personID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	name VARCHAR(250) NOT NULL,
-	adresse VARCHAR(250) NOT NULL,
-	istDienstleister BOOL NOT NULL DEFAULT FALSE,
-	PRIMARY KEY ( personID )
-);
-
-CREATE TABLE Systemnutzer (
-	nutzerID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	benutzernamen VARCHAR(250) NOT NULL,
-	passwort VARCHAR(250) NOT NULL,
-	person INT UNSIGNED NOT NULL,
-	PRIMARY KEY ( nutzerID ),
-	FOREIGN KEY ( nutzerID ) REFERENCES Personen(personID)
+	hochzeitsmanagerID INT UNSIGNED NOT NULL,
+	hochzeitspaarID INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( hochzeitsID ),
+	FOREIGN KEY ( hochzeitsmanagerID ) REFERENCES Personen(personID)
+		ON UPDATE CASCADE
+		ON DELETE NO ACTION,
+	FOREIGN KEY ( hochzeitspaarID ) REFERENCES Personen(personID)
 		ON UPDATE CASCADE
 		ON DELETE NO ACTION
 );
@@ -90,6 +80,7 @@ CREATE TABLE Aktionen (
 	aktionID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	titel VARCHAR(250) NOT NULL,
 	beschreibung VARCHAR(250) NOT NULL,
+	hochzeitsID INT UNSIGNED NOT NULL,
 	notiz VARCHAR(250),
 	prioritaet TINYINT NOT NULL,
 	datum DATETIME NOT NULL,
@@ -104,7 +95,10 @@ CREATE TABLE Aktionen (
 		ON DELETE NO ACTION,
 	FOREIGN KEY ( aktionsArt ) REFERENCES AktionsArten(aktionsArtID)
 		ON UPDATE CASCADE
-		ON DELETE NO ACTION
+		ON DELETE NO ACTION,
+	FOREIGN KEY ( hochzeitsID ) REFERENCES Hochzeitsveranstaltungen(hochzeitsID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 ); 
 
 CREATE TABLE Essen (
@@ -160,12 +154,6 @@ CREATE TABLE Orte (
 	PRIMARY KEY ( ortID )
 );
 
-CREATE TABLE Rollen (
-	rollenID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	rolle INT UNSIGNED NOT NULL,
-	PRIMARY KEY ( rollenID )
-);
-
 
 -- Erzeuge Relationen
 
@@ -193,26 +181,14 @@ CREATE TABLE HochzeitsCaterer (
 		ON DELETE CASCADE
 );
 
-CREATE TABLE Hochzeitspaare (
+CREATE TABLE HochzeitsUnterhaltunsmanager (
 	hochzeitsID INT UNSIGNED,
-	personID INT UNSIGNED,
-	PRIMARY KEY ( hochzeitsID, personID ),
+	unterhaltungsmanagerID INT UNSIGNED,
+	PRIMARY KEY ( hochzeitsID, unterhaltungsmanagerID ),
 	FOREIGN KEY ( hochzeitsID ) REFERENCES Hochzeitsveranstaltungen(hochzeitsID)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
-	FOREIGN KEY ( personID ) REFERENCES Personen(personID)
-		ON UPDATE CASCADE
-		ON DELETE CASCADE
-);
-
-CREATE TABLE HochzeitsAktionen (
-	hochzeitsID INT UNSIGNED NOT NULL,
-	aktionID INT UNSIGNED NOT NULL,
-	PRIMARY KEY ( hochzeitsID, aktionID ),
-	FOREIGN KEY ( hochzeitsID ) REFERENCES Hochzeitsveranstaltungen(hochzeitsID)
-		ON UPDATE CASCADE
-		ON DELETE CASCADE,
-	FOREIGN KEY ( aktionID ) REFERENCES Aktionen(aktionID)
+	FOREIGN KEY ( unterhaltungsmanagerID ) REFERENCES Personen(personID)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
