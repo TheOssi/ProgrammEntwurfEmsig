@@ -147,10 +147,13 @@ CREATE TABLE Hilfsmittel (
 
 CREATE TABLE Orte (
 	ortID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	adresse VARCHAR(250) NOT NULL,
+	strasse VARCHAR(250) NOT NULL,
+	hausnummer VARCHAR(10) NOT NULL,
 	adressZusatz VARCHAR(250),
 	stadt VARCHAR(250),
-	postleitzahl INT UNSIGNED NOT NULL,
+	postleitzahl VARCHAR(50) NOT NULL,
+	provinz VARCHAR(250) NOT NULL,
+	land CHAR(3) NOT NULL,
 	PRIMARY KEY ( ortID )
 );
 
