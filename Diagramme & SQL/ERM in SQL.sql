@@ -1,5 +1,4 @@
 -- #### TODO #######
--- länge bei strings
 -- mit AKD abgleich + Reihenfolge
 -- #################
 
@@ -15,31 +14,31 @@ USE HOCHZEITSPLANER;
 
 CREATE TABLE AktionsZustaende (
 	aktionsZustandID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	beschreibung VARCHAR(250) NOT NULL,
+	beschreibung TEXT NOT NULL,
 	PRIMARY KEY ( aktionsZustandID )
 );
 
 CREATE TABLE AktionsArten (
 	aktionsArtID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	beschreibung VARCHAR(250) NOT NULL,
+	beschreibung TEXT NOT NULL,
 	PRIMARY KEY ( aktionsArtID )
 );
 
 CREATE TABLE HilfsmittelArten (
 	hilfsmittelArtID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	beschreibung VARCHAR(250) NOT NULL,
+	beschreibung TEXT NOT NULL,
 	PRIMARY KEY ( hilfsmittelArtID )
 );
 
 CREATE TABLE Telefonnummern (
 	telefonnnummerID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	telefonnnummer VARCHAR(100) NOT NULL,
+	telefonnnummer VARCHAR(15) NOT NULL,
 	PRIMARY KEY ( telefonnnummerID )
 );
 
 CREATE TABLE EmailAdressen (
 	emailAdresseID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	emailAdresse VARCHAR(100) NOT NULL,
+	emailAdresse VARCHAR(254) NOT NULL,
 	PRIMARY KEY ( emailAdresseID )
 );
 
@@ -48,16 +47,16 @@ CREATE TABLE EmailAdressen (
 
 CREATE TABLE Personen (
  	personID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	name VARCHAR(250) NOT NULL,
-	adresse VARCHAR(250) NOT NULL,
+	name TEXT NOT NULL,
+	adresse TEXT NOT NULL,
 	istDienstleister BOOL NOT NULL DEFAULT FALSE,		
 	PRIMARY KEY ( personID )		
 );
 
 CREATE TABLE Hochzeitsveranstaltungen (
 	hochzeitsID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	titel VARCHAR(250) NOT NULL,
-	motto VARCHAR(250),
+	titel TEXT NOT NULL,
+	motto VARCHAR(200),
 	hochzeitsmanagerID INT UNSIGNED NOT NULL,
 	hochzeitspaarID INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( hochzeitsID ),
@@ -71,7 +70,7 @@ CREATE TABLE Hochzeitsveranstaltungen (
 
 CREATE TABLE Caterer (
 	catererID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	beschreibung VARCHAR(255),
+	beschreibung TEXT,
 	kontaktPerson INT UNSIGNED NOT NULL,
 	zumVergleich BOOL NOT NULL DEFAULT FALSE,
 	PRIMARY KEY ( catererID ),
@@ -82,10 +81,10 @@ CREATE TABLE Caterer (
 
 CREATE TABLE Aktionen (
 	aktionID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	titel VARCHAR(250) NOT NULL,
-	beschreibung VARCHAR(250) NOT NULL,
+	titel TEXT NOT NULL,
+	beschreibung TEXT NOT NULL,
 	hochzeitsID INT UNSIGNED NOT NULL,
-	notiz VARCHAR(250),
+	notiz TEXT,
 	prioritaet TINYINT NOT NULL,
 	datum DATETIME NOT NULL,
 	dauer TIME NOT NULL,
@@ -107,7 +106,7 @@ CREATE TABLE Aktionen (
 
 CREATE TABLE Nahrungsmittel (
 	nahrungsmittelID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	beschreibung VARCHAR (250),
+	beschreibung TEXT,
 	menge DOUBLE UNSIGNED NOT NULL,
 	mengenbeschreibung VARCHAR(50) NOT NULL,
 	PRIMARY KEY ( nahrungsmittelID )
@@ -115,8 +114,8 @@ CREATE TABLE Nahrungsmittel (
 
 CREATE TABLE Medien(
 	mediumID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	uri VARCHAR(250) NOT NULL UNIQUE,
-	title VARCHAR(250) NOT NULL,
+	uri TEXT NOT NULL UNIQUE,
+	title TEXT NOT NULL,
 	PRIMARY KEY ( mediumID )
 );
 
@@ -124,16 +123,16 @@ CREATE TABLE Belege(
 	belegID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
 	kosten DOUBLE UNSIGNED NOT NULL,
 	währung CHAR(3) NOT NULL,
-	title VARCHAR(250) NOT NULL,
-	beschreibung VARCHAR(250), 
+	title TEXT NOT NULL,
+	beschreibung TEXT, 
 	private BOOL NOT NULL,
 	PRIMARY KEY ( belegID )
 );
 
 CREATE TABLE Hilfsmittel (
 	hilfsmittelID INT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT,
-	title VARCHAR(250) NOT NULL,
-	beschreibung VARCHAR(250),
+	title TEXT NOT NULL,
+	beschreibung TEXT,
 	hilfsmittelArt INT UNSIGNED NOT NULL,
 	PRIMARY KEY ( hilfsmittelID ),
 	FOREIGN KEY ( hilfsmittelArt ) REFERENCES HilfsmittelArten(hilfsmittelArtID)
@@ -143,12 +142,12 @@ CREATE TABLE Hilfsmittel (
 
 CREATE TABLE Orte (
 	ortID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
-	strasse VARCHAR(250) NOT NULL,
+	strasse VARCHAR(100) NOT NULL,
 	hausnummer VARCHAR(10) NOT NULL,
-	adressZusatz VARCHAR(250),
-	stadt VARCHAR(250),
-	postleitzahl VARCHAR(50) NOT NULL,
-	provinz VARCHAR(250) NOT NULL,
+	adressZusatz VARCHAR(100),
+	stadt VARCHAR(100),
+	postleitzahl VARCHAR(15) NOT NULL,
+	provinz VARCHAR(100) NOT NULL,
 	land CHAR(3) NOT NULL,
 	PRIMARY KEY ( ortID )
 );
