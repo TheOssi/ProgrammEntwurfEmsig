@@ -88,7 +88,7 @@ CREATE TABLE Aktionen (
 	notiz VARCHAR(250),
 	prioritaet TINYINT NOT NULL,
 	anfang DATETIME NOT NULL,
-	emde DATETIME NOT NULL,
+	ende DATETIME NOT NULL,
 	aktionsArt INT UNSIGNED NOT NULL,
 	versteckt BOOL NOT NULL DEFAULT true,
 	aktionsZustand INT UNSIGNED NOT NULL,
