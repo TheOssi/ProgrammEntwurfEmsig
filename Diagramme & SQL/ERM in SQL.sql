@@ -1,6 +1,7 @@
 -- #### TODO #######
 -- länge bei strings
 -- mit AKD abgleich + Reihenfolge
+in beschreibung z.b. aktionszustände erklären
 -- #################
 
 -- Datenbank erzeugen
@@ -151,6 +152,18 @@ CREATE TABLE Orte (
 	provinz VARCHAR(250) NOT NULL,
 	land CHAR(3) NOT NULL,
 	PRIMARY KEY ( ortID )
+);
+
+CREATE TABLE NichtInformierteNutzer(
+	personID INT UNSIGNED NOT NULL,
+	aktionID INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( personID, aktionID ),
+	FOREIGN KEY ( personID ) REFERENCES Personen(personID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	FOREIGN KEY ( aktionID ) REFERENCES Aktionen(aktionID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
 );
 
 
