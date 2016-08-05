@@ -1,9 +1,3 @@
--- #### TODO #######
--- länge bei strings
--- mit AKD abgleich + Reihenfolge
-in beschreibung z.b. aktionszustände erklären
--- #################
-
 -- Datenbank erzeugen
 CREATE DATABASE HOCHZEITSPLANER;
 
@@ -12,7 +6,7 @@ CREATE DATABASE HOCHZEITSPLANER;
 USE HOCHZEITSPLANER;
 
 
--- Erzeuge Extra-Tabellen
+-- Erzeuge Entity-Hilfs-Tabellen
 
 CREATE TABLE AktionsZustaende (
 	aktionsZustandID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
@@ -154,19 +148,6 @@ CREATE TABLE Orte (
 	land CHAR(3) NOT NULL,
 	PRIMARY KEY ( ortID )
 );
-
-CREATE TABLE NichtInformierteNutzer(
-	personID INT UNSIGNED NOT NULL,
-	aktionID INT UNSIGNED NOT NULL,
-	PRIMARY KEY ( personID, aktionID ),
-	FOREIGN KEY ( personID ) REFERENCES Personen(personID)
-		ON UPDATE CASCADE
-		ON DELETE CASCADE,
-	FOREIGN KEY ( aktionID ) REFERENCES Aktionen(aktionID)
-		ON UPDATE CASCADE
-		ON DELETE CASCADE
-);
-
 
 -- Erzeuge Relationen
 
@@ -347,6 +328,21 @@ CREATE TABLE PersonenTelefonnummern (
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
 	FOREIGN KEY ( telefonnnummerID ) REFERENCES Telefonnummern(telefonnnummerID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE
+);
+
+
+--Erzeuge Hilfs-Tabellen
+
+CREATE TABLE NichtInformierteNutzer(
+	personID INT UNSIGNED NOT NULL,
+	aktionID INT UNSIGNED NOT NULL,
+	PRIMARY KEY ( personID, aktionID ),
+	FOREIGN KEY ( personID ) REFERENCES Personen(personID)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+	FOREIGN KEY ( aktionID ) REFERENCES Aktionen(aktionID)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE
 );
