@@ -6,7 +6,7 @@ CREATE DATABASE HOCHZEITSPLANER;
 USE HOCHZEITSPLANER;
 
 
--- Erzeuge Entity-Hilfs-Tabellen
+-- Erzeuge Entity-Hilfstabellen
 
 CREATE TABLE AktionsZustaende (
 	aktionsZustandID INT UNSIGNED NOT NULL UNIQUE AUTO_INCREMENT,
@@ -148,6 +148,7 @@ CREATE TABLE Orte (
 	land CHAR(3) NOT NULL,
 	PRIMARY KEY ( ortID )
 );
+
 
 -- Erzeuge Relationen
 
@@ -333,7 +334,7 @@ CREATE TABLE PersonenTelefonnummern (
 );
 
 
---Erzeuge Hilfs-Tabellen
+--Erzeuge Programm-Tabellen
 
 CREATE TABLE NichtInformierteNutzer(
 	personID INT UNSIGNED NOT NULL,
