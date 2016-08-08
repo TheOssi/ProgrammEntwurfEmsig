@@ -334,7 +334,7 @@ CREATE TABLE PersonenTelefonnummern (
 );
 
 
---Erzeuge Programm-Tabellen
+-- Erzeuge Programm-Tabellen
 
 CREATE TABLE NichtInformierteNutzer(
 	personID INT UNSIGNED NOT NULL,
